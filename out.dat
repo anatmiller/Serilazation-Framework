@@ -1,0 +1,10 @@
+type: float
+m_x: 1.000000
+m_y: 2.000000
+type: float
+m_x: 50.000000
+m_y: 12.000000
+type: int
+m_radius: 10
+m_x: 5.000000
+m_y: 10.000000
