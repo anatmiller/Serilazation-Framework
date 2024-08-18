@@ -31,7 +31,8 @@ void InArchive::read(std::vector<std::shared_ptr<Base>>&shapeVec)
     m_SerializationAlgorithm->deserialize(resultObjects, m_inputfilename);
     for (std::vector<std::shared_ptr<NVP>> shapeMemberstypeValues: resultObjects)
     {
-        std::string shapeType = shapeMemberstypeValues[0]->getType();
+        std::string shapeType = shapeMemberstypeValues[0]->getValue();
+
         shared_ptr<Base> curShape = shapeFactory.createShapeType(shapeType);
         shapeVec.push_back(curShape);
         curShape->deserialize(shapeMemberstypeValues);
