@@ -3,6 +3,9 @@
 #include "SearlizeFactoryHandler.h"
 #include "fstream"
 #include "istream"
+#include <fstream>
+#include <string>
+#include <sstream>
 
 shared_ptr<SerializationAlgorithm> ConstructTextSerializer()
 {
@@ -14,34 +17,42 @@ const int registeredTypeDat = SearlizeFactoryHandler::getInstance().registerSeri
 const int registeredTypeTxt = SearlizeFactoryHandler::getInstance().registerSerializationType(".txt", ConstructTextSerializer);
 
 
-
+using namespace std;
 bool SerializeText::deserialize(std::vector<std::vector<std::shared_ptr<NVP>>>& objectsVec, string fileName)
 {
 	std::ifstream inputFile(fileName);
 	std::vector<std::shared_ptr<NVP>> objects;
-	std::string type = "";
 
 	if (inputFile.is_open())
 	{
 		std::string line;
+		std::string token;
+
 		while (std::getline(inputFile, line))
 		{
-
-			std::size_t delimiterPos = line.find(": ");
-			if (delimiterPos != std::string::npos)
+		
+			std::istringstream iss(line);
+			std::shared_ptr<NVP> shapeComponetsVec;
+			std::vector<std::shared_ptr<NVP>> shapes;
+			while (std::getline(iss, token,' '))
 			{
+				size_t n = token.find(":");
 			
-				// Extract the name and the value from the line
-				std::string name = line.substr(0, delimiterPos);
-				std::string value = line.substr(delimiterPos + 2);
+				if (n != std::string::npos) {
+					std::string name = token.substr(0, n);
+					std::string value = token.substr(n + 1);
 
-				// Create a new NVP object and add it to the vector
-			   // Assuming NVP has a constructor that takes a name and a value
-				objects.push_back(std::make_shared<NVP>(name, value, type));
+					std::shared_ptr<NVP> newShape;
+					newShape = std::make_shared<NVP>(name, value);
+					shapes.push_back(newShape);
+					
+				}
 
 			}
 
-			objectsVec.push_back(objects);
+
+			objectsVec.push_back(shapes);
+			
 		}
 
 	}
@@ -50,7 +61,7 @@ bool SerializeText::deserialize(std::vector<std::vector<std::shared_ptr<NVP>>>& 
 		cout << "Failed to open file " << endl;
 		//std::cerr << "Failed to open the file: " << fileName << std::endl;
 	}
-	return true;
+return true;
 }
 
 bool SerializeText::serialize(const std::vector<std::vector<std::shared_ptr<NVP>>>& objectsShapeVec, string fileName)
@@ -58,15 +69,17 @@ bool SerializeText::serialize(const std::vector<std::vector<std::shared_ptr<NVP>
 	std::ofstream outputFile(fileName);
 	for (std::vector<std::shared_ptr<NVP >> shapeVec: objectsShapeVec)
 	{
-		outputFile << "type" << ": " << shapeVec[0]->getType() << std::endl;
+
+		//outputFile << "type" << ": " << shapeVec[0]->getType() << std::endl;
 
 		for (std::shared_ptr<NVP > nvp : shapeVec)
 		{
 			if (nvp)
 			{
-				outputFile << nvp->getName() << ": " << nvp->getValue() << std::endl;
+				outputFile << nvp->getName() << ":" << nvp->getValue() << "  ";
 			}
 		}
+		outputFile << endl;
 	
 	}
 	
