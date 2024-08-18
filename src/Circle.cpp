@@ -28,8 +28,8 @@ void Circle::deserialize(std::vector<std::shared_ptr<NVP>> ShapeVecValues)
 
 	for (std::shared_ptr<NVP> nvpObject : ShapeVecValues)
 	{
-		if (nvpObject->getType() == "float")
-		{
+		//if (nvpObject->getType() == "float")
+		//{
 			if (nvpObject->getName() == "m_x")
 			{
 				m_x = stof(nvpObject->getValue(), &size);
@@ -38,15 +38,15 @@ void Circle::deserialize(std::vector<std::shared_ptr<NVP>> ShapeVecValues)
 			{
 				m_y = stof(nvpObject->getValue(), &size);
 			}
-		}
+		//}
 
-		if (nvpObject->getType() == "int")
-		{
+		//if (nvpObject->getType() == "int")
+		//{
 			if (nvpObject->getName() == "m_radius")
 			{
 				m_radius = stoi(nvpObject->getValue(), &size);
 			}
-		}
+		//}
 	}
 
 }
